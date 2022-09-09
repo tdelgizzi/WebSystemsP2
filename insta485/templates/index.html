@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>insta485</title>
+</head>
+<body>
+    <div class="photo">
+        <div class = "header">
+            <ul>
+                <li><a href="/" class="topright">home</a></li>
+                <li><a href="/explore/" class="topright">explore</a></li>
+                <li><a href="/u/{{ logname }}/" class="topright">{{ logname }}</a></li>
+            </ul>
+        </div>
+        {% for post in posts %}
+            <hr>
+            <a href="/u/{{ post['owner'] }}/"><img src = "{{ url_for('show_uploads', filename = post['owner_img_url']) }}" alt = "{{ post['owner'] }}" style="width:30px;height:30px;"></a>
+            <a href="/u/{{ post['owner'] }}/" class="topright">{{ post['owner'] }}</a>
+            <a href="/p/{{ post['postid'] }}/" class="timestamp">{{ post['timestamp'] }}</a>
+            <div style = "position:relative; left:0px; top:10px;"></div>
+            <img src="{{ url_for('show_uploads', filename = post['img_url']) }}" alt="pic">
+            <p>{{ post['likes'] }} {{ "likes" if post['likes'] is ne(1) else "like" }}</p>
+            {% if post['user_like'] is ne(1) %}
+            <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+            <form action="{{ url_for('show_likes') }}?target={{ url_for('show_index') }}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="operation" value="like"/>
+            <input type="hidden" name="postid" value="{{ post['postid'] }}"/>
+            <input type="submit" name="like" value="like"/>
+            </form>
+            {% else %}
+            <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+            <form action="{{ url_for('show_likes') }}?target={{ url_for('show_index') }}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="operation" value="unlike"/>
+            <input type="hidden" name="postid" value="{{ post['postid'] }}"/>
+            <input type="submit" name="unlike" value="unlike"/>
+            </form>
+            {% endif %}
+            {% for comment in post['comments'] %}
+                <p><span><a href="/u/{{ comment['owner'] }}/" class="topright">{{ comment['owner'] }}</a></span> {{ comment['text'] }} </p> 
+        {% endfor %}
+            <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+            <form action="{{ url_for('show_comments') }}?target={{ url_for('show_index') }}" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="operation" value="create"/>
+                <input type="hidden" name="postid" value="{{ post['postid'] }}"/>
+                <input type="text" name="text" required/>
+                <input type="submit" name="comment" value="comment"/>
+            </form>    
+    {% endfor %}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>insta485</title>
+</head>
+<body>
+    <div class="photo">
+        <div class = "header">
+            <ul>
+                <li><a href="/" class="topright">home</a></li>
+                <li><a href="/explore/" class="topright">explore</a></li>
+                <li><a href="/u/{{ logname }}/" class="topright">{{ logname }}</a></li>
+            </ul>
+        </div>
+        <hr>
+        <h2>Followers</h2>
+        {% for follow in followers %}
+        <ul>
+            <li><img src="{{ url_for('show_uploads', filename = follow['user_img_url']) }}" alt="pic" class="small"></li>
+            <li><a href="/u/{{ follow['username'] }}/" class="topright">{{ follow['username'] }}</a></li>
+            <li>
+                    {% if logname is ne(follow['username']) %}
+                        {% if follow['logname_follows_username'] %}
+                            <p>following</p>
+                            <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+                            <form action="{{ url_for('post_following') }}?target={{ url_for('show_followers', user_url_slug = username) }}" method="post" enctype="multipart/form-data">
+                            <input type="submit" name="unfollow" value="unfollow"/>
+                            <input type="hidden" name="username" value="{{ follow['username'] }}"/>
+                            <input type="hidden" name="operation" value="unfollow"/>
+                        </form>
+                        {% else %}
+                            <p>not following</p>
+                            <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+                            <form action="{{ url_for('post_following') }}?target={{ url_for('show_followers', user_url_slug = username) }}" method="post" enctype="multipart/form-data">
+                                <input type="submit" name="follow" value="follow"/>
+                                <input type="hidden" name="username" value="{{ follow['username'] }}"/>
+                                <input type="hidden" name="operation" value="follow"/>
+                            </form>
+                        {% endif %}
+                    {% endif %}
+            </li>
+        </ul>
+        <hr>
+        {% endfor %}
+    </div>
+   
+</body>
+</html>

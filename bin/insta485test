@@ -1,0 +1,14 @@
+#!/bin/bash
+# insta485test
+
+# Stop on errors
+# See https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/
+set -Eeuo pipefail
+
+pycodestyle insta485
+
+pydocstyle insta485
+
+pylint --disable=cyclic-import --unsafe-load-any-extension=y insta485
+
+pytest -v tests

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>insta485</title>
+</head>
+<body>
+    <div class="photo">
+        <div class = "header">
+            <ul>
+                <li><a href="/" class="topright">home</a></li>
+                <li><a href="/explore/" class="topright">explore</a></li>
+                <li><a href="/u/{{ logname }}/" class="topright">{{ logname }}</a></li>
+            </ul>
+        </div>
+        <hr>
+        <h2>Discover People</h2>
+        {% for user in not_following %}
+        <ul>
+            <li>
+                <img src="{{ url_for('show_uploads', filename = user['user_img_url']) }}" alt="pic" class="small">
+            </li>
+            <li>
+                <a href="{{ url_for('show_user', user_url_slug = user['username']) }}" class="topright">{{ user['username'] }}</a>
+            </li>
+            <li>
+                <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+                <form action="{{ url_for('post_following') }}?target={{ url_for('show_explore') }}" method="post" enctype="multipart/form-data">
+                <input type="submit" name="follow" value="follow"/>
+                <input type="hidden" name="username" value="{{ user['username'] }}"/>
+                <input type="hidden" name="operation" value="follow"/>
+                </form>
+            </li>
+        </ul>
+        <hr>
+        {% endfor %}
+    </div>
+</body>
+</html>

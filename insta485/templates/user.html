@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>insta485</title>
+</head>
+<body>
+    <div class="photo">
+        <div class = "header">
+            <ul>
+                <li><a href="/" class="topright">home</a></li>
+                <li><a href="/explore/" class="topright">explore</a></li>
+                <li><a href="/u/{{ logname }}/" class="topright">{{ logname }}</a></li>
+            </ul>
+        </div>
+        <hr>
+        <h2>{{ username }}</h2>
+        {% if logname is ne(username) %}
+        {% if logname_follows_username %}
+            <p>following</p>
+            <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+            <form action="{{ url_for('post_following')}}?target={{ url_for('show_user', user_url_slug = username) }}" method="post" enctype="multipart/form-data">
+                <input type="submit" name="unfollow" value="unfollow"/>
+                <input type="hidden" name="username" value="{{ username }}"/>
+                <input type="hidden" name="operation" value="unfollow"/>
+            </form>
+        {% else %}
+            <p>not following</p>
+            <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+            <form action="{{ url_for('post_following')}}?target={{ url_for('show_user', user_url_slug = username) }}" method="post" enctype="multipart/form-data">
+                <input type="submit" name="follow" value="follow"/>
+                <input type="hidden" name="username" value="{{ username }}"/>
+                <input type="hidden" name="operation" value="follow"/>
+            </form>
+        {% endif %}
+        {% else %}
+        <a href="{{ url_for('show_edit') }}">Edit profile</a>
+        <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+        <form action="{{ url_for('show_logout') }}" method="post" enctype="multipart/form-data">
+            <input type="submit" name="logout" value="Logout"/>
+        </form>
+        <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+        <form action="{{ url_for('show_posts') }}?target={{ url_for('show_user', user_url_slug = username) }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required/>
+            <input type="submit" name="create_post" value="upload new post"/>
+            <input type="hidden" name="operation" value="create"/>
+        </form>
+        {% endif %}
+        <span>{{ total_posts }} {{ "posts" if total_posts is ne(1) else "post" }} <a href = "/u/{{ username }}/followers/" class="topright">{{ followers }} {{ "followers" if followers is ne(1) else "follower" }}</a> <a href="/u/{{ username }}/following/" class="topright"> {{ following }} following</a> </span>
+        <p>{{ fullname }}</p>
+        {% for post in posts %}
+        <a href="/p/{{ post['postid'] }}/"><img src="{{ url_for('show_uploads', filename = post['img_url']) }}" alt="pic" style="width:200px;height:200px;"></a>
+        {% endfor %}
+    </div>
+   
+</body>
+</html>

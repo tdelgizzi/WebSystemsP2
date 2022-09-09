@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>insta485</title>
+</head>
+<body>
+    <div class = "header">
+        <ul>
+            <li><a href="/" class="topright">home</a></li>
+            <li><a href="/accounts/login/" class="topright">login</a></li>
+        </ul>
+    </div>
+
+    <hr>
+    <!-- DO NOT CHANGE THIS (aside from styling) -->
+    <form action="{{ url_for('show_accounts') }}?target={{ url_for('show_index') }}" method="post" enctype="multipart/form-data">
+        <input type="text" name="username" required/>
+        <input type="password" name="password" required/>
+        <input type="submit" value="login"/>
+        <input type="hidden" name="operation" value="login"/>
+    </form>
+
+    <span>Don't have an account? <a href="/accounts/create/">Sign up</a></span>
+</body>
+</html>
